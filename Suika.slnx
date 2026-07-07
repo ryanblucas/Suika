@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Suika.vcxproj" Id="854a0e15-eea0-48e0-b937-05d9c3aa419b" />
+</Solution>
