@@ -389,6 +389,7 @@ fallen_object::fallen_object(object_type type, sf::Vector2f start_pos)
 {
 	m_type = type;
 	m_phys_id = world->add_ball(start_pos, game_radius_from_type(type));
+	world->apply_force_on_ball(m_phys_id, sf::Vector2f({ static_cast<float>(std::rand() % 8 - 4), 0.f }));
 	m_marked_for_deletion = false;
 	m_last_collision = collision_pair();
 	m_last_collision.objects.first = m_phys_id;
