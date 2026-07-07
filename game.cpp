@@ -92,6 +92,8 @@ void game::destroy()
 	delete world;
 	objects.clear();
 	score = 0;
+	top_above_threshold_tick_count = 0;
+	top = 0.f;
 }
 
 static void game_check_lose_condition()
@@ -301,16 +303,6 @@ void hovering_object::tick(float delta)
 		m_ticks_waited = 0;
 		m_type = get_random_type();
 		adjust_position_in_bounds();
-		
-		world->set_ball_collision_handler(m_waiting_for->phys_id(), [](const physics::ball& original, const physics::ball& other)
-		{
-			auto original_fallen = game_find_from_id(original.get_id());
-			auto arg = game_find_from_id(other.get_id());
-			if (original_fallen && arg)
-			{
-				original_fallen->handle_collision(*arg);
-			}
-		});
 		break;
 	}
 	case hovering_state::WAITING:
@@ -393,6 +385,16 @@ fallen_object::fallen_object(object_type type, sf::Vector2f start_pos)
 	m_marked_for_deletion = false;
 	m_last_collision = collision_pair();
 	m_last_collision.objects.first = m_phys_id;
+		
+	world->set_ball_collision_handler(m_phys_id, [](const physics::ball& original, const physics::ball& other)
+	{
+		auto original_fallen = game_find_from_id(original.get_id());
+		auto arg = game_find_from_id(other.get_id());
+		if (original_fallen && arg)
+		{
+			original_fallen->handle_collision(*arg);
+		}
+	});
 }
 
 sf::Vector2f fallen_object::position() const
